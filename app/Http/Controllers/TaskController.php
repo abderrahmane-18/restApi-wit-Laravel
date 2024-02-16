@@ -17,6 +17,12 @@ class TaskController extends Controller
     {
         $tasks = QueryBuilder::for(Task::class)
     ->allowedFilters('is_done')
+    ->defaultSort('created_at')// Tasks are returned to you based on which one was created first
+    //->defaultSort('-created_at')// Tasks are returned to you based on which one was created  last
+->allowedSorts('title','is_done','created_at')
+//{{DOMAIN}}/api/tasks?sort=title
+//{{DOMAIN}}/api/tasks?sort=title,is_done
+//{{DOMAIN}}/api/tasks?sort=-title,-is_done
     ->paginate();
         //return response()->json(Task::all());
         return new TaskCollection($tasks);
