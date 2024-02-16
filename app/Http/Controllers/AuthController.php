@@ -14,16 +14,24 @@ class AuthController extends Controller
             'email'=>'required|email',
             'password'=>'required',
         ]);
-        if(!Auth::attempt(($validated)))
+        if(! Auth::attempt(($validated)))
         {
             return response()->json([
                 'message'=>'invalid inforamtion',
             ],401);
+        }
+        /*
+            else {
+                return response()->json([
+                    'message'=>'valid inforamtion',
+                ]);
+            }
+*/
             $user=User::where('email',$validated['email'])->first();
             return response()->json([
-                'acces_token'=>$user->createToken('api_token')->plainTextToken,
-                'token_type'=>'Bearer'
+                'access_token'=>$user->createToken('api_token')->plainTextToken,
+                'token_type'=>'Bearer',
             ]);
-        }
+        
     }
 }
