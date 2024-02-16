@@ -16,9 +16,7 @@ class Task extends Model
         'is_done'=>'boolean',
     ];
 
-    protected $hidden=[
-        'updated_at',
-    ];
+
     public function creator():BelongsTo
     {
           return $this->belongsTo(User::class,'user_id');
