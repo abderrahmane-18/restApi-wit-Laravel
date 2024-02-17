@@ -8,13 +8,16 @@ use App\Http\Resources\TaskCollection;
 use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Spatie\QueryBuilder\QueryBuilder;
 
 
 class TaskController extends Controller
 {
+
     public function index(Request $request)
     {
+
         $tasks = QueryBuilder::for(Task::class)
     ->allowedFilters('is_done')
     ->defaultSort('created_at')// Tasks are returned to you based on which one was created first
@@ -35,10 +38,15 @@ class TaskController extends Controller
 
     public function  store(StoreTaskRequest $request)     
     {
-        $validated=$request->validated();
-        $task=Task::create($validated);
+       
         
-        return new TaskResource($task);
+    $request->validated($request->all());
+    $task=Task::create([
+       'user_id'=>Auth::user()->id,
+       'title'=>$request->title
+        
+    ]);
+    return new TaskResource($task);
     }
 public function update(UpdateTaskRequest $request , Task $task)
 {
